@@ -16,10 +16,12 @@ model = gensim.models.KeyedVectors.load_word2vec_format(model_path, binary=True)
 word = 'cat'
 similar_words = model.most_similar(word, topn=5)
 
+result = model.most_similar(positive=['basketball', 'black'], negative=['white'])
+print(result)
 print(f"Words similar to {word}:")
+
 for word, score in similar_words:
     print(f"{word} - {score}")
-
 
 # https://stackoverflow.com/questions/40581010/how-to-run-tsne-on-word2vec-created-from-gensim
 # for help with visualization
@@ -27,18 +29,19 @@ for word, score in similar_words:
 # Take the first 300 words (for simplicity)
 
 # List of specific words to visualize
-specific_words = ["king", "queen", "man", "woman", "computer", "laptop", "coworker", "cat", "dog", "pet"]
+specific_words = ["king", "queen", "man", "woman", "computer", "laptop", "coworker", "cat", "dog", "pet", "child", "working", "cats"]
 
 # Extract vectors for the specific words
 word_vectors = np.array([model[word] for word in specific_words if word in model])
 
+print(model["hello"])
+# model.wv.most_similar('computer', topn=10)
 # Extract vectors for the specific words and pair them with their labels
 word_label_pairs = [(word, model[word]) for word in specific_words if word in model.key_to_index]
 
 # Separate the words from vectors so that i can use this for labels later
 words_to_plot = [pair[0] for pair in word_label_pairs]
 vectors_to_plot = np.array([pair[1] for pair in word_label_pairs])
-
 
 # This is for randomly taking any words                         
 #limit = 40
@@ -55,5 +58,5 @@ plt.scatter(Y[:, 0], Y[:, 1])
 for label, x, y in zip(words_to_plot, Y[:, 0], Y[:, 1]):
     plt.annotate(label, xy=(x, y), xytext=(0, 0), textcoords='offset points')
 
-plt.show()
+# plt.show()
 
