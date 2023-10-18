@@ -1,6 +1,8 @@
 from allennlp.modules.elmo import Elmo, batch_to_ids
 import torch
 import numpy as np
+from sklearn.manifold import TSNE
+#import matplotlib.pyplot as plt
 from scipy.spatial.distance import cosine
 
 # Make sure you've downloaded the weights and options files
@@ -20,13 +22,33 @@ def compute_cosine_similarity(vector1, vector2):
 
 
 # Example sentences to test for cosine similarity
-sentences = ["Cats", "London."]
+sentences = ["Dogs", "Dog"]
 embeddings = get_elmo_embeddings(sentences)
 
 # Taking the mean of embeddings of all words in a sentence to get a sentence vector
+# The closer to one the closer the semantics are
 sentence1_vector = embeddings[0].mean(dim=0).numpy()
 sentence2_vector = embeddings[1].mean(dim=0).numpy()
 
 similarity = compute_cosine_similarity(sentence1_vector, sentence2_vector)
 
 print(f"Cosine Similarity: {similarity}")
+
+
+
+# Sample sentences
+sentences = ["I love programming.", "Coding is fun.", "Python is my favorite language."]
+character_ids = batch_to_ids(sentences)
+embeddings = elmo(character_ids)
+embeddings = embeddings["elmo_representations"][0].detach().numpy()
+
+
+
+# # Reduce dimensions using t-SNE
+# embeddings_2d = TSNE(n_components=2).fit_transform(embeddings)
+
+# # Plot
+# plt.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1])
+# for i, sentence in enumerate(sentences):
+#     plt.annotate(sentence, (embeddings_2d[i, 0], embeddings_2d[i, 1]))
+# plt.show()
