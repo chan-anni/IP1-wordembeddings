@@ -13,23 +13,24 @@ model = gensim.models.KeyedVectors.load_word2vec_format(model_path, binary=True)
 
 
 # Find similar words
-# word = 'cat'
-# similar_words = model.most_similar(word, topn=5)
-
-result = model.most_similar(positive=['softball', 'he'], negative=['she'])
-print(result)
-
-print("\n")
-
-result2 = model.most_similar(positive=['baseball', 'she'], negative=['he'])
-
-print(result2)
-
-
+# word = 'loud'
+# similar_words = model.most_similar(word, topn=10)
 # print(f"Words similar to {word}:")
 
 # for word, score in similar_words:
 #     print(f"{word} - {score}")
+
+result = model.most_similar(positive=['softball', 'he'], negative=['she'])
+# print(result)
+
+# print("\n")
+
+result2 = model.most_similar(negative=['Mexican','Caucasian'])
+
+print(result2)
+
+
+
 
 # https://stackoverflow.com/questions/40581010/how-to-run-tsne-on-word2vec-created-from-gensim
 # for help with visualization
@@ -83,6 +84,7 @@ for label, x, y in zip(words_to_plot, Y[:, 0], Y[:, 1]):
 gender_vector = model["he"]-model["she"] # try PCA later if possible
 
 # here we are testing gender biases in professions
+### replace profession with generic vector name for ease later
 def compute_gender_score(profession, gender_direction, model):
     # getting the embedding for the profession
     profession_vector = model[profession]
@@ -93,7 +95,7 @@ def compute_gender_score(profession, gender_direction, model):
     return profession_vector.dot(gender_direction) / np.linalg.norm(gender_direction)
 
 # professions
-professions = ["doctor", "nurse", "engineer", "teacher", "lawyer","singer", "artist", "librarian", "programmer", "maid", "homemaker", "chef", "CEO", "manager", "lawyer", "paralegal", "attendent", "secretary", "attorny", "athlete", "mechanic", "veteran"]
+professions = ["doctor", "nurse", "engineer", "teacher", "lawyer","singer", "artist", "librarian", "programmer", "maid", "homemaker", "chef", "CEO", "manager", "lawyer", "paralegal", "attendent", "secretary", "attorny", "athlete", "mechanic", "veteran", "scientist", "salesman", "pitcher", "surgeon", "construction"]
 gender_scores = [compute_gender_score(prof, gender_vector, model) for prof in professions]
 
 print(gender_scores)
@@ -106,3 +108,67 @@ plt.title("Gender Direction Projection for Different Professions")
 plt.grid(axis='x')
 
 plt.show()
+
+
+
+# attributes
+attributes = ["nurturing", "loyal", "strong", "kind", "honest", "independent", "leadership", "sexy", "emotional", "calm", "smart", "polite", "confident", "agreeable", "assertive", "passive", "dominant", "competitive", "hardworking", "cute", "talented"]
+gender_scores = [compute_gender_score(atr, gender_vector, model) for atr in attributes]
+
+print(gender_scores)
+
+# visualising!
+plt.figure(figsize=(15, 10))
+plt.barh(attributes, gender_scores, color=['blue' if score > 0 else 'pink' for score in gender_scores])
+plt.xlabel("Gender Projection Score")
+plt.title("Gender Direction Projection for Different Attributes")
+plt.grid(axis='x')
+
+plt.show()
+
+
+# Race vector because I want to look at race
+
+race_vector = model["african"]-model["american"] 
+
+professions = ["doctor", "nurse", "engineer", "teacher", "lawyer","singer", "artist", "librarian", "programmer", "maid", "homemaker", "chef", "CEO", "manager", "lawyer", "paralegal", "attendent", "secretary", "attorny", "athlete", "mechanic", "veteran", "scientist", "salesman", "pitcher", "surgeon", "construction"]
+gender_scores = [compute_gender_score(job, gender_vector, model) for job in professions]
+
+def compute_race_score(i, race_direction, model):
+    # getting the embedding for the profession
+    profession_vector = model[i]
+    return profession_vector.dot(race_direction) / np.linalg.norm(race_direction)
+
+# professions
+professions = ["doctor", "nurse", "engineer", "teacher", "lawyer","singer", "artist", "librarian", "programmer", "maid", "homemaker", "chef", "CEO", "manager", "lawyer", "paralegal", "attendent", "secretary", "attorny", "athlete", "mechanic", "veteran", "scientist", "salesman", "pitcher", "surgeon", "construction", "criminal", "hairdresser", "quarterback"]
+race_scores = [compute_race_score(prof, race_vector, model) for prof in professions]
+
+print(race_scores)
+
+# Blue indicates a leaning towards "african"
+# Pink indicates a leaning towards "american"
+
+plt.figure(figsize=(15, 10))
+plt.barh(professions, race_scores, color=['blue' if score > 0 else 'pink' for score in race_scores])
+plt.xlabel("Race Projection Score")
+plt.title("Race Direction Projection for Different Attributes")
+plt.grid(axis='x')
+
+plt.show()
+
+
+
+
+# make an array
+# for element i in array add male and subtract female
+# loop through and find most similar and print results
+
+
+
+
+# result = model.most_similar(positive=['softball', 'he'], negative=['she'])
+# # print(result)
+
+
+
+# gender_scores = [compute_gender_score(prof, gender_vector, model) for prof in professions]
