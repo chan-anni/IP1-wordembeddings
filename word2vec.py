@@ -29,7 +29,21 @@ result2 = model.most_similar(negative=['Mexican','Caucasian'])
 
 print(result2)
 
+# loop to check through traits
+traits = ["nurturing", "loyal", "strong", "kind", "honest", "independent", "leadership", "sexy", "emotional", "calm", "smart", "polite", "confident", "agreeable", "assertive", "passive", "dominant", "competitive", "hardworking", "cute", "talented"]
+for x in traits:
+    new_trait = model.most_similar(positive=[x, 'he'], negative=['she'])
+    print(x + " : \n")
+    print(new_trait)
+    print("\n")
 
+# loop to check through a profession
+professions = ["doctor", "nurse", "engineer", "teacher", "lawyer","singer", "artist", "librarian", "programmer", "maid", "homemaker", "chef", "CEO", "manager", "lawyer", "paralegal", "attendent", "secretary", "attorny", "athlete", "mechanic", "veteran", "scientist", "salesman", "pitcher", "surgeon", "construction"]
+for x in professions:
+    new_job = model.most_similar(positive=[x, 'he'], negative=['she'])
+    print(x + " : \n")
+    print(new_job)
+    print("\n")
 
 
 # https://stackoverflow.com/questions/40581010/how-to-run-tsne-on-word2vec-created-from-gensim
@@ -67,11 +81,11 @@ Y = tsne.fit_transform(vectors_to_plot)
 # Plot the results
 plt.figure(figsize=(12, 8))
 plt.scatter(Y[:, 0], Y[:, 1])
-
+#plt.xlabel("Gender")
 for label, x, y in zip(words_to_plot, Y[:, 0], Y[:, 1]):
     plt.annotate(label, xy=(x, y), xytext=(0, 0), textcoords='offset points')
 
-#plt.show()
+plt.show()
 
 
 #trying to make a chart for words and seeing their gender more easily
@@ -159,16 +173,3 @@ plt.show()
 
 
 
-# make an array
-# for element i in array add male and subtract female
-# loop through and find most similar and print results
-
-
-
-
-# result = model.most_similar(positive=['softball', 'he'], negative=['she'])
-# # print(result)
-
-
-
-# gender_scores = [compute_gender_score(prof, gender_vector, model) for prof in professions]
