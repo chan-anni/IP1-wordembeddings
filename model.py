@@ -5,6 +5,7 @@ from sklearn.manifold import TSNE
 #import matplotlib.pyplot as plt
 from scipy.spatial.distance import cosine
 
+
 # Make sure you've downloaded the weights and options files
 options_file = "https://allennlp.s3.amazonaws.com/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_options.json"
 weight_file = "https://allennlp.s3.amazonaws.com/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_weights.hdf5"
@@ -22,7 +23,7 @@ def compute_cosine_similarity(vector1, vector2):
 
 
 # Example sentences to test for cosine similarity
-sentences = ["Dogs", "Dog"]
+sentences = ["The police officer ate", "The police man ate"]
 embeddings = get_elmo_embeddings(sentences)
 
 # Taking the mean of embeddings of all words in a sentence to get a sentence vector
@@ -44,11 +45,4 @@ embeddings = embeddings["elmo_representations"][0].detach().numpy()
 
 
 
-# # Reduce dimensions using t-SNE
-# embeddings_2d = TSNE(n_components=2).fit_transform(embeddings)
 
-# # Plot
-# plt.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1])
-# for i, sentence in enumerate(sentences):
-#     plt.annotate(sentence, (embeddings_2d[i, 0], embeddings_2d[i, 1]))
-# plt.show()
