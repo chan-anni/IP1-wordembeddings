@@ -30,7 +30,7 @@ print(f"\n\t the result is: {result}")
 
 
 print("\nlooping through arrays to find the most similar")
-# seeing that the vector math works, I'm looping through the different arrays so that I can speed things up
+# I'm looping through the different arrays so that I can speed things up
 # loop to check through traits in relation to man an woman
 traits = ["nurturing", "loyal", "strong", "kind", "honest", "independent", "leadership", "sexy", "emotional", "calm", "smart", "polite", "confident", "agreeable", "assertive", "passive", "dominant", "competitive", "hardworking", "cute", "talented"]
 for x in traits:
@@ -65,12 +65,6 @@ word_label_pairs = [(word, model[word]) for word in specific_words if word in mo
 words_to_plot = [pair[0] for pair in word_label_pairs]
 vectors_to_plot = np.array([pair[1] for pair in word_label_pairs])
 
-#This is for randomly taking any words                         
-limit = 40
-word_vectors = np.array([model[word] for word in model.index_to_key[:limit]])
-
-
-## Plotting out specific words out to reference and see how it works
 
 # Apply t-SNE for dimensionality reduction to make it 2D
 tsne = TSNE(n_components=2, random_state=0, perplexity=min(5, len(word_vectors) - 1))
@@ -90,31 +84,21 @@ plt.show()
 
 # Figure 2: graphing vector projections onto a gendered vector --> seeing if a word leans more male or female
 
-#trying to make a chart for words and seeing their gender more easily
-
-# computing a gender vector
-# we want to create a subspace, Gender Subspace, for the larger vector space, V, of all words in Word2Vec
-# basically this Gender Subspace has the same properties as V but also specifically defined by the set of vectors that define gender
-
-# however we can only currently calculate one aspect of the gender difference using this:
+# creating a gender vector for projection
+    # blue = male, pink = female
 gender_vector = model["he"]-model["she"] 
 
 # here we are testing gender biases in professions
-### replace profession with generic vector name for ease later
-def compute_gender_score(profession, gender_direction, model):
+def compute_projection_score(profession, vector_direction, model):
     # getting the embedding for the profession
     profession_vector = model[profession]
 
      # projecting the profession vector onto the gender direction
-     # need the dot product of the gender direction vector and the vector making up the word in the profession array
-     # normalize/divide by magnitude of the gender direction vector
-    return profession_vector.dot(gender_direction) / np.linalg.norm(gender_direction)
+    return profession_vector.dot(vector_direction) / np.linalg.norm(vector_direction)
 
 # professions
 professions = ["doctor", "nurse", "engineer", "teacher", "lawyer","singer", "artist", "librarian", "programmer", "maid", "homemaker", "chef", "CEO", "manager", "lawyer", "paralegal", "attendent", "secretary", "attorny", "athlete", "mechanic", "veteran", "scientist", "salesman", "pitcher", "surgeon", "construction"]
-gender_scores = [compute_gender_score(prof, gender_vector, model) for prof in professions]
-
-print(gender_scores)
+gender_scores = [compute_projection_score(prof, gender_vector, model) for prof in professions]
 
 # visualising!
 plt.figure(figsize=(10, 6))
@@ -122,16 +106,15 @@ plt.barh(professions, gender_scores, color=['blue' if score > 0 else 'pink' for 
 plt.xlabel("Gender Projection Score")
 plt.title("Gender Direction Projection for Different Professions")
 plt.grid(axis='x')
-
+plt.xlim(-1.5, 1.5)
 plt.show()
 
 
 
-# attributes
+# Figure 3: Gender and attributes
 attributes = ["nurturing", "loyal", "strong", "kind", "honest", "independent", "leadership", "sexy", "emotional", "calm", "smart", "polite", "confident", "agreeable", "assertive", "passive", "dominant", "competitive", "hardworking", "cute", "talented"]
-gender_scores = [compute_gender_score(atr, gender_vector, model) for atr in attributes]
+gender_scores = [compute_projection_score(atr, gender_vector, model) for atr in attributes]
 
-print(gender_scores)
 
 # visualising!
 plt.figure(figsize=(15, 10))
@@ -139,151 +122,62 @@ plt.barh(attributes, gender_scores, color=['blue' if score > 0 else 'pink' for s
 plt.xlabel("Gender Projection Score")
 plt.title("Gender Direction Projection for Different Attributes")
 plt.grid(axis='x')
-
+plt.xlim(-1.5, 1.5)
 plt.show()
 
 
+
+
 # Race vector because I want to look at race
+    # Blue indicates a leaning towards "african"
+    # Pink indicates a leaning towards "american"
 
+
+# Figure 4: Race and professions
 race_vector = model["african"]-model["american"] 
-
-professions = ["doctor", "nurse", "engineer", "teacher", "lawyer","singer", "artist", "librarian", "programmer", "maid", "homemaker", "chef", "CEO", "manager", "lawyer", "paralegal", "attendent", "secretary", "attorny", "athlete", "mechanic", "veteran", "scientist", "salesman", "pitcher", "surgeon", "construction"]
-gender_scores = [compute_gender_score(job, gender_vector, model) for job in professions]
-
-def compute_race_score(i, race_direction, model):
-    # getting the embedding for the profession
-    profession_vector = model[i]
-    return profession_vector.dot(race_direction) / np.linalg.norm(race_direction)
 
 # professions
 professions = ["doctor", "nurse", "engineer", "teacher", "lawyer","singer", "artist", "librarian", "programmer", "maid", "homemaker", "chef", "CEO", "manager", "lawyer", "paralegal", "attendent", "secretary", "attorny", "athlete", "mechanic", "veteran", "scientist", "salesman", "pitcher", "surgeon", "construction", "criminal", "hairdresser", "quarterback"]
-race_scores = [compute_race_score(prof, race_vector, model) for prof in professions]
+race_scores = [compute_projection_score(prof, race_vector, model) for prof in professions]
 
-print(race_scores)
-
-# Blue indicates a leaning towards "african"
-# Pink indicates a leaning towards "american"
 
 plt.figure(figsize=(15, 10))
 plt.barh(professions, race_scores, color=['blue' if score > 0 else 'pink' for score in race_scores])
 plt.xlabel("Race Projection Score")
-plt.title("Race Direction Projection for Different Attributes")
+plt.title("Race Direction Projection for Different Professions")
 plt.grid(axis='x')
-
+plt.xlim(-1.5, 1.5)
 plt.show()
 
-# Figure 6: attributes #2
+# Figure 5: attributes and race
 attributes2 = ["violent", "competent", "rational", "sympathetic", "analytical", "novice", "educated", "uneducated", "corrupt", "poor", "trustworthy", "loyal", "poor", "rich", "tall", "forceful", "lazy", "hardworking", "diligent", "intelligent", "gentle", "dangerous"]
-race_scores = [compute_race_score(atr, race_vector, model) for atr in attributes2]
+race_scores = [compute_projection_score(atr, race_vector, model) for atr in attributes2]
 
 
 plt.figure(figsize=(15, 10))
 plt.barh(attributes2, race_scores, color=['blue' if score > 0 else 'pink' for score in race_scores])
 plt.xlabel("Race Projection Score")
-plt.title("Figure 6: Race Direction Projection for Different Attributes Cont.")
+plt.title("Figure 6: Race Direction Projection for Different Attributes")
 plt.grid(axis='x')
-
+plt.xlim(-1.5, 1.5)
 plt.show()
 
 
-# Figure 7: literally random words and race
+
+# Figure 6: literally random words and race
 
 random = ["abyss", "flashers", "sweetener", "olives", "chicken", "shins", "cult", "blue", "aprons", "during", "ventilator", "child", "catnip", "brazilians", "pants", "minor", "rice", "rock", "copyright", "likely", "generate", "this"]
-race_scores = [compute_race_score(x, race_vector, model) for x in random]
+race_scores = [compute_projection_score(x, race_vector, model) for x in random]
 
 
 plt.figure(figsize=(15, 10))
 plt.barh(random, race_scores, color=['blue' if score > 0 else 'pink' for score in race_scores])
 plt.xlabel("Race Projection Score")
-plt.title("Race Direction Projection for Different Attributes")
+plt.title("Race Direction Projection for Random Words")
 plt.grid(axis='x')
-
+plt.xlim(-1.5, 1.5)
 plt.show()
 
 
 
 
-
-#WEAT Word Embeddings Association Test
-
-A = ["man", "boy", "he", "father", "son", "guy", "male", "uncle"]
-B = ["woman", "girl", "she", "mother", "daughter", "female", "aunt"]
-X = ["math", "algebra", "science", "programming", "coding", "computer", "data", "calculus", "physics", "engineer", "mechanical", "biology"] # 12 components
-Y = ["art", "drawing", "literature", "history", "dance", "poetry", "painting", "reading", "media", "crafts", "writing", "fashion"]
-
-def association_score(word, A, B, X, Y, model):
-    return np.mean([model.similarity(word, x) for x in X]) - np.mean([model.similarity(word, y) for y in Y])
-
-
-def differential_association(A, B, X, Y, model):
-    return sum(association_score(word, A, B, X, Y, model) for word in A) - sum(association_score(word, A, B, X, Y, model) for word in B)
-
-
-def weat_effect_size(A, B, X, Y, model):
-    assoc_A = np.mean([association_score(word, A, B, X, Y, model) for word in A])
-    assoc_B = np.mean([association_score(word, A, B, X, Y, model) for word in B])
-    effect_size = (assoc_A - assoc_B) / np.std([association_score(word, A, B, X, Y, model) for word in A+B])
-    return effect_size
-
-def weat_p_value(A, B, X, Y, model, num_permutations=10000):
-    observed_statistic = differential_association(A, B, X, Y, model)
-    combined = A + B
-    count = 0
-    for _ in range(num_permutations):
-        np.random.shuffle(combined)
-        new_A = combined[:len(A)]
-        new_B = combined[len(A):]
-        if differential_association(new_A, new_B, X, Y, model) > observed_statistic:
-            count += 1
-    p_value = count / num_permutations
-    return p_value
-
-# Calculate WEAT score
-effect_size = weat_effect_size(A, B, X, Y, model)
-p_value = weat_p_value(A, B, X, Y, model)
-
-print(f"Effect size: {effect_size}")
-print(f"P-value: {p_value}")
-
-# This assumes 'model' is a Word2Vec-like model that has a 'get_vector' method.
-words = A + B + X + Y  # Combine all the words you want to visualize
-word_vectors = np.array([model.get_vector(word) for word in words])
-
-tsne = TSNE(n_components=2, random_state=0)
-word_vectors_2d = tsne.fit_transform(word_vectors)
-
-# Define the size of the plot
-plt.figure(figsize=(16, 16))
-
-# Separate the points by their set
-for i, word in enumerate(words):
-    x, y = word_vectors_2d[i, :]
-    plt.scatter(x, y)
-    plt.annotate(word, xy=(x, y), xytext=(5, 2),
-                 textcoords='offset points', ha='right', va='bottom')
-
-# Set words from set A to a specific color
-for word in A:
-    index = words.index(word)
-    plt.annotate(word, xy=(word_vectors_2d[index, 0], word_vectors_2d[index, 1]),
-                 bbox=dict(facecolor='green', alpha=0.5))
-
-# Set words from set B to a different color
-for word in B:
-    index = words.index(word)
-    plt.annotate(word, xy=(word_vectors_2d[index, 0], word_vectors_2d[index, 1]),
-                 bbox=dict(facecolor='red', alpha=0.5))
-
-# Set words from set X to a different color
-for word in X:
-    index = words.index(word)
-    plt.annotate(word, xy=(word_vectors_2d[index, 0], word_vectors_2d[index, 1]),
-                 bbox=dict(facecolor='blue', alpha=0.5))
-
-# Set words from set Y to a different color
-for word in Y:
-    index = words.index(word)
-    plt.annotate(word, xy=(word_vectors_2d[index, 0], word_vectors_2d[index, 1]),
-                 bbox=dict(facecolor='yellow', alpha=0.5))
-
-plt.show()
