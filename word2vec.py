@@ -172,7 +172,6 @@ plt.grid(axis='x')
 
 plt.show()
 
-
 # Figure 6: attributes #2
 attributes2 = ["violent", "competent", "rational", "sympathetic", "analytical", "novice", "educated", "uneducated", "corrupt", "poor", "trustworthy", "loyal", "poor", "rich", "tall", "forceful", "lazy", "hardworking", "diligent", "intelligent", "gentle", "dangerous"]
 race_scores = [compute_race_score(atr, race_vector, model) for atr in attributes2]
@@ -200,8 +199,6 @@ plt.title("Race Direction Projection for Different Attributes")
 plt.grid(axis='x')
 
 plt.show()
-
-
 
 
 
