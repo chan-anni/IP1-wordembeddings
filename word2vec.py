@@ -173,6 +173,40 @@ plt.grid(axis='x')
 plt.show()
 
 
+# Figure 6: attributes #2
+attributes2 = ["violent", "competent", "rational", "sympathetic", "analytical", "novice", "educated", "uneducated", "corrupt", "poor", "trustworthy", "loyal", "poor", "rich", "tall", "forceful", "lazy", "hardworking", "diligent", "intelligent", "gentle", "dangerous"]
+race_scores = [compute_race_score(atr, race_vector, model) for atr in attributes2]
+
+
+plt.figure(figsize=(15, 10))
+plt.barh(attributes2, race_scores, color=['blue' if score > 0 else 'pink' for score in race_scores])
+plt.xlabel("Race Projection Score")
+plt.title("Figure 6: Race Direction Projection for Different Attributes Cont.")
+plt.grid(axis='x')
+
+plt.show()
+
+
+# Figure 7: literally random words and race
+
+random = ["abyss", "flashers", "sweetener", "olives", "chicken", "shins", "cult", "blue", "aprons", "during", "ventilator", "child", "catnip", "brazilians", "pants", "minor", "rice", "rock", "copyright", "likely", "generate", "this"]
+race_scores = [compute_race_score(x, race_vector, model) for x in random]
+
+
+plt.figure(figsize=(15, 10))
+plt.barh(random, race_scores, color=['blue' if score > 0 else 'pink' for score in race_scores])
+plt.xlabel("Race Projection Score")
+plt.title("Race Direction Projection for Different Attributes")
+plt.grid(axis='x')
+
+plt.show()
+
+
+
+
+
+
+
 #WEAT Word Embeddings Association Test
 
 A = ["man", "boy", "he", "father", "son", "guy", "male", "uncle"]
