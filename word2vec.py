@@ -89,12 +89,12 @@ plt.show()
 gender_vector = model["he"]-model["she"] 
 
 # here we are testing gender biases in professions
-def compute_projection_score(profession, vector_direction, model):
-    # getting the embedding for the profession
-    profession_vector = model[profession]
+def compute_projection_score(x, vector_direction, model):
+   # getting the embedding for the profession
+    x_vector = model[x]
 
-     # projecting the profession vector onto the gender direction
-    return profession_vector.dot(vector_direction) / np.linalg.norm(vector_direction)
+   # projecting the profession vector onto the gender direction
+    return np.dot(x_vector, vector_direction) / ( np.linalg.norm(x_vector)* np.linalg.norm(vector_direction))
 
 # professions
 professions = ["doctor", "nurse", "engineer", "teacher", "lawyer","singer", "artist", "librarian", "programmer", "maid", "homemaker", "chef", "CEO", "manager", "lawyer", "paralegal", "attendent", "secretary", "attorny", "athlete", "mechanic", "veteran", "scientist", "salesman", "pitcher", "surgeon", "construction"]
@@ -106,7 +106,7 @@ plt.barh(professions, gender_scores, color=['blue' if score > 0 else 'pink' for 
 plt.xlabel("Gender Projection Score")
 plt.title("Gender Direction Projection for Different Professions")
 plt.grid(axis='x')
-plt.xlim(-1.5, 1.5)
+plt.xlim(-1, 1)
 plt.show()
 
 
@@ -122,7 +122,7 @@ plt.barh(attributes, gender_scores, color=['blue' if score > 0 else 'pink' for s
 plt.xlabel("Gender Projection Score")
 plt.title("Gender Direction Projection for Different Attributes")
 plt.grid(axis='x')
-plt.xlim(-1.5, 1.5)
+plt.xlim(-1, 1)
 plt.show()
 
 
@@ -146,7 +146,7 @@ plt.barh(professions, race_scores, color=['blue' if score > 0 else 'pink' for sc
 plt.xlabel("Race Projection Score")
 plt.title("Race Direction Projection for Different Professions")
 plt.grid(axis='x')
-plt.xlim(-1.5, 1.5)
+plt.xlim(-1, 1)
 plt.show()
 
 # Figure 5: attributes and race
@@ -159,7 +159,7 @@ plt.barh(attributes2, race_scores, color=['blue' if score > 0 else 'pink' for sc
 plt.xlabel("Race Projection Score")
 plt.title("Figure 6: Race Direction Projection for Different Attributes")
 plt.grid(axis='x')
-plt.xlim(-1.5, 1.5)
+plt.xlim(-1, 1)
 plt.show()
 
 
@@ -175,7 +175,7 @@ plt.barh(random, race_scores, color=['blue' if score > 0 else 'pink' for score i
 plt.xlabel("Race Projection Score")
 plt.title("Race Direction Projection for Random Words")
 plt.grid(axis='x')
-plt.xlim(-1.5, 1.5)
+plt.xlim(-1, 1)
 plt.show()
 
 
