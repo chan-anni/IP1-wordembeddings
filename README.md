@@ -8,11 +8,15 @@ This project is motivated by a curiosity about how machines represent human lang
 Understand Word Relationships: Explore how embeddings represent words in different contexts and capture semantic relationships.
 Analyze Bias: Investigate how embeddings encode gender and racial biases, and examine methods for quantifying and visualizing these biases.
 
-### Methods
+### Data sources
+- Pre-trained Word2Vec embeddings from Google News dataset
+- ELMo model from allennlp
+- Model weight files for ELMo from: https://allenai.org/allennlp/software/elmo
 
 
 ### Results
 **Gender Bias**: Observed some projections of stereotypical gender roles within certain word groups (e.g., “nurse” closer to female-associated terms).
+![image](https://github.com/user-attachments/assets/4be37204-743c-4e22-942c-d0d2b3e8c31b)
 
 
 Setup: 
