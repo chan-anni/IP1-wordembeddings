@@ -15,8 +15,12 @@ Analyze Bias: Investigate how embeddings encode gender and racial biases, and ex
 
 
 ### Results
-**Gender Bias**: Observed some projections of stereotypical gender roles within certain word groups (e.g., “nurse” closer to female-associated terms).
+**Gender Bias**: Observed some strong projections of stereotypical gender roles within certain word groups (e.g., “nurse” closer to female-associated terms).
 ![image](https://github.com/user-attachments/assets/4be37204-743c-4e22-942c-d0d2b3e8c31b)
+<img width="949" alt="image" src="https://github.com/user-attachments/assets/0bfc6bf1-e996-4750-87ae-974546813454">
+
+**Racial Bias**: Observed some projections of cultural contextual biases relating to race based on names and other racially related words (e.g., comparing the most common black and white name to a set of words, "athlete" leans more towards the name Deshawn over Jake).
+<img width="977" alt="image" src="https://github.com/user-attachments/assets/e586822d-acec-433e-a548-02d1ee6adf9d">
 
 
 Setup: 
